@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import '@/styles/tec-design-tokens.css';
 
 export const metadata: Metadata = {
-  title:       'TEC Domain',
-  description: 'TEC Ecosystem — Pi Network Super App',
+  title:       'TEC VIP — Premium Experience Runtime',
+  description: 'TEC VIP — premium experience across the TEC ecosystem: tiers, benefits, concierge (read-only).',
 };
 
 export default function RootLayout({

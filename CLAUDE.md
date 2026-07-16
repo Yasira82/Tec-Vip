@@ -1,15 +1,78 @@
-# TEC Domain App Template — Claude Code Instructions
+# TEC VIP — Claude Code Instructions
 
-## What This Repo Is
+> ⚡ **SESSION START:** اقرأ `knowledge-base/C-02___CURRENT_STATE_.md` + **app charter
+> `knowledge-base/C-128___VIP_PREMIUM_EXPERIENCE_RUNTIME.md`** من `yasira82/tec-knowledge-base` (branch: `main`).
 
-The **golden starter template** for a new app in the TEC Federated Platform.
-It ships a correct, Portal-ready skeleton: Hub SSO, dual-mode Pi payments,
-CSRF, legal pages, and CI policy guards. Clone it, run the "New app setup"
-checklist below, and you have a compliant app — no missing pieces.
+## What This App Is
 
-**Reference of record:** `yasira82/tec-knowledge-base` — especially
-`C-12_Dual_Mode_Payment.md` (payment + anti-regression) and
-`audits/PORTAL_SUBMISSION_RUNBOOK_*.md`.
+**The Premium Experience Runtime** of the Pi economy (C-128) — the **System of
+Privilege** (a cross-cutting layer). VIP answers one question:
+
+```
+"What exclusive benefits do I receive?"
+```
+
+VIP translates recognition + achievement into concrete premium experiences
+**across the whole ecosystem**. It is the reward layer of the value chain
+**Legend (evidence) → Elite (recognition) → VIP (experience)**.
+
+Built from `tec-template-base` (Next.js 15 frontend).
+
+**Current Phase: VIP V0/V1 — Premium Experience preview (read-only).** Identity /
+domain / slug / legal + a themed home (**tiers** STANDARD→PARTNER · cross-app
+**benefits** each naming its owning app · **concierge**) + a `/tier/[id]` detail
+page + **VIP Standard** subscription (the Pi Portal "Process a Transaction" gate).
+> **V1 already exists** as **Hub PRO/ENTERPRISE** — this app is the read-only
+surface over it. A dedicated `vip-service` is V2. Not yet deployed.
+
+---
+
+## Pi App Identity
+
+| Field | Value |
+|-------|-------|
+| **App** | TEC VIP |
+| **Domain** | `https://vip.tecosystem.app` |
+| **Pi App ID** | ⏳ TBD — register at Pi Developer Portal · then Vercel `NEXT_PUBLIC_PI_APP_ID` |
+| **APP_SOURCE slug** | `vip` (payment-service resolves `PI_API_KEY_VIP`) |
+| **PI_SANDBOX** | `false` (Mainnet) |
+
+---
+
+## VIP-Specific Rules (C-128)
+
+### 🔴 Constitutional rule — VIP grants ELIGIBILITY, owning apps enforce VALUE (P5)
+VIP **owns no economic capability** — it adds a premium experience layer **on top
+of** the owning apps. A benefit (e.g. "reduced Commerce fees", "48hr FundX early
+access") is an **eligibility**, NOT a VIP-set policy. The owning app + System
+define and enforce the actual value:
+- **Commerce** owns transaction fees · **Zone** owns verification SLAs · **FundX**
+  owns access windows · **System** governs subscription gating.
+- A VIP grant an owning app has not honored is inert — the downstream service is
+  the authority.
+
+### The chain (earned, not arbitrary)
+- **VIP_ELITE** tier requires an **Elite recognition** (C-127) — earned, never bought.
+- VIP **cannot** grant Elite recognition, modify Legend records, or execute payments.
+- Earned/verified tiers (Elite / Merchant / Investor / Founder / Partner) are unlocked
+  by recognition or verification **elsewhere** — the only thing sold here is the
+  **STANDARD** subscription.
+
+### The ownership boundary
+VIP **OWNS**: membership tiers, benefit *grants* (eligibility), concierge, exclusive
+access + events. VIP does **NOT OWN**:
+- **Recognition** → Elite (C-127). **Reputation** → Legend (C-126). **Identity /
+  verification** → Hub + Zone. **Economic execution** → payment-service.
+- **Investment** → FundX. **Governance** → System. **Risk** → Insure.
+
+### Isolation (P6)
+A user sees their OWN membership — identity from the `tec_user` session cookie
+server-side, **never** a query param or body. Earned tiers check Elite/Zone status
+**live** at delivery. No session → fail closed.
+
+**Reference of record:** `yasira82/tec-knowledge-base` —
+`C-128___VIP_PREMIUM_EXPERIENCE_RUNTIME.md` (charter) + `C-12_Dual_Mode_Payment.md`
+(payment anti-regression) + `C-123` (session/cookies).
 
 ---
 
@@ -43,6 +106,9 @@ if (isHubNavigation() || !(window as any).Pi || !piReady) {
 }
 // Mode 2: standalone — createPaymentRecord() then createU2APayment() (src/lib/pi-payment.ts)
 ```
+> VIP Standard (subscription) is the only buy flow — earned tiers are never sold.
+> Approve under `PI_API_KEY_VIP` (never the default Hub key — the Analytics
+> approve→502 lesson, C-12 §11).
 
 ### ADR-009 — Unified payment contract
 `amount` is a **number**; gateway path is **`/api/payment/*`** (singular); the only
@@ -61,67 +127,54 @@ Identity is derived from the `tec_user` cookie server-side — **never from the 
 
 ---
 
-## What's included
+## Setup status + Roadmap (C-128)
 
 ```
-middleware.ts                              CSRF (double-submit OR Origin) + page guard
-src/app/api/auth/sso-callback/route.ts     Hub SSO landing (open-redirect-safe)
-src/app/api/auth/refresh/route.ts          token refresh
-src/app/api/bff/payment/{create,approve,complete,resolve-incomplete}/route.ts
-src/app/api/bff/items/route.ts             example domain route (copy this pattern)
-src/app/api/health/route.ts                health endpoint (C-92/C-96) — fail-safe, public, never 500s
-src/lib/pi-payment.ts                      createPaymentRecord + createU2APayment
-src/lib/pi/PiRuntime.ts                    PAL — single choke-point for window.Pi.* (R1)
-src/lib/pi/PiCircuitBreaker.ts             CLOSED→OPEN→HALF_OPEN (3 fails → 60s)
-src/lib/flags.ts                           feature flags (NEXT_PUBLIC_FLAG_*) + useFlag
-src/lib/observability/logger.ts            structured JSON logger (log.info/warn/error) — no silent failures (C-96)
-src/lib/observability/reportError.ts       Sentry-ready error reporter (single swap-point)
-src/app/privacy/page.tsx · terms/page.tsx  Pi Portal legal pages
-src/styles/tec-design-tokens.css           import in app/layout.tsx
-.github/workflows/ci.yml                   payment-policy + CSRF guard + lint/typecheck/test/build
-```
+VIP V0/V1 — Premium Experience preview (customized from template):
+  ✅ package.json name = tec-vip · APP_SOURCE = 'vip'
+  ✅ sso-callback ALLOWED_AUDIENCES → vip.tecosystem.app + tec-vip.vercel.app
+  ✅ privacy + terms → TEC VIP / vip.tecosystem.app
+  ✅ NEW-A: no NEXT_PUBLIC_API_GATEWAY_URL / Railway host in the client bundle
+  ✅ /app themed: tiers + cross-app benefits + concierge + VIP Standard (real Pi U2A)
+  ✅ /tier/[id] detail (benefits per owning app + P5 note) + BFF /api/bff/vip/membership
 
-**v2 (production-ready by default):** every new app ships
-- `/api/health` — uniform C-92 signal (platform health runtime + observability scrape + SLO/runtime-evidence loop);
-- structured `log` + `reportError` — use `log.error`/`reportError` in catch blocks (a silent error handler is an invisible failure, C-96; `reportError` is the one place to wire Sentry per app);
-- `PiRuntime` (PAL) + `PiCircuitBreaker` — never call `window.Pi.*` directly; go through PiRuntime so an SDK change is a one-file fix (R1) and flapping is contained;
-- `flags.ts` — feature flags from day one (`NEXT_PUBLIC_FLAG_<NAME>`);
-- coverage gate — `npm run test:coverage` (add devDep `@vitest/coverage-v8`; 60% floor, raise as the app grows).
+Next (before live):
+  □ Register Pi App ID (Pi Developer Portal) → Vercel NEXT_PUBLIC_PI_APP_ID +
+    API_GATEWAY_URL · INTERNAL_SECRET · SSO_SECRET · PI_SANDBOX=false.
+    (NEXT_PUBLIC_HUB_URL MUST be https://hub.tecosystem.app — the apex tecosystem.app
+     is not the Hub → ERR_CONNECTION_CLOSED at login; redeploy after changing it.)
+  □ payment-service: set PI_API_KEY_VIP on Railway (approve→502 otherwise, C-12 §11).
+  □ Hub SSO: add vip.tecosystem.app + tec-vip.vercel.app to Hub /api/auth/sso
+    ALLOWED_TARGETS + Hub domain registry.
+  □ Deploy (Vercel) + runtime-verify login (C-123) + a real VIP Standard payment
+    Mode 1 (Hub) AND Mode 2 (standalone).
 
----
-
-## New app setup checklist
-
-```
-□ package.json: set "name"
-□ middleware.ts: adjust PROTECTED_ROUTES
-□ sso-callback/route.ts: set ALLOWED_AUDIENCES + DEFAULT_REDIRECT to your domain
-□ src/lib/pi-payment.ts + payment/create: set APP_SOURCE slug
-□ privacy/page.tsx + terms/page.tsx: set APP / DOMAIN / governing law / contacts
-□ Add ADR-007 isHubNavigation() guard to every buy handler
-□ .env: API_GATEWAY_URL · INTERNAL_SECRET · SSO_SECRET · NEXT_PUBLIC_PI_APP_ID · PI_SANDBOX=false (prod)
-□ Pi Developer Portal: register domain + App ID; set /privacy + /terms URLs
-□ Verify a real Pi payment Mode 1 (via Hub) AND Mode 2 (standalone)
+VIP V2+ (post-Portal — C-128): dedicated vip-service (status/benefits/events/
+  concierge endpoints); apps read VIP status live (never store it); Elite-tier check
+  in real time; VIP events. Then V3 vip.pi external membership.
 ```
 
 ---
 
 ## What NOT To Do
 
+- Do NOT set fees / SLAs / queue positions in VIP — those are the owning app's (P5)
+- Do NOT sell earned tiers (Elite/Merchant/Founder) — only STANDARD is subscription
+- Do NOT grant Elite recognition or modify Legend records from VIP
+- Do NOT store VIP status inside consuming apps — it is checked live (C-128)
 - Do NOT validate CSRF in a route handler — middleware only (CI blocks it)
 - Do NOT send `amount` as a string, or use `/payments` / `x-service-secret`
 - Do NOT skip the ADR-007 `isHubNavigation()` guard before `window.Pi`
 - Do NOT store tokens in localStorage; do NOT derive identity from the body
 - Do NOT add `NEXT_PUBLIC_*` for internal service URLs or `INTERNAL_SECRET`
-- Do NOT use an open `redirect` param without the same-origin guard (open redirect)
 
 ---
 
 ## Commit Convention
 
 ```
-feat(scope):  new feature      fix(payment): payment flow fix (test carefully)
-fix(scope):   bug fix          chore(scope): build/config
+feat(vip):  new experience feature   fix(payment): payment flow fix (test carefully)
+fix(vip):   bug fix                   chore(scope):  build/config
 ```
 
 ---
