@@ -3,13 +3,31 @@
 // TEC VIP — Premium Experience home (C-128), read-only V1.
 // The reward layer of Legend (evidence) → Elite (recognition) → VIP (experience).
 // Cross-cutting: VIP grants ELIGIBILITY; the owning apps enforce the value (P5).
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { TEC_COLORS } from '@yasser172/tec-ui';
-import { TIERS, CONCIERGE, CURRENT_TIER, SOURCE_META, getTier } from '@/lib/vip/membership';
+import { TIERS, CONCIERGE, CURRENT_TIER, SOURCE_META, type Tier, type VipTier } from '@/lib/vip/membership';
 import VipPro from './components/VipPro';
 
 export default function VipHome() {
-  const current = getTier(CURRENT_TIER);
+  // The caller's OWN membership + tier catalog — fetched from the BFF (identity from
+  // the session cookie, P6), falling back to the curated sample so it's never blank.
+  const [tiers, setTiers] = useState<Tier[]>(TIERS);
+  const [currentTier, setCurrentTier] = useState<VipTier>(CURRENT_TIER);
+  useEffect(() => {
+    let alive = true;
+    fetch('/api/bff/vip/membership', { cache: 'no-store' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!alive || !d) return;
+        if (Array.isArray(d.tiers)) setTiers(d.tiers);
+        if (d.currentTier) setCurrentTier(d.currentTier);
+      })
+      .catch(() => { /* keep the sample */ });
+    return () => { alive = false; };
+  }, []);
+
+  const current = tiers.find((t) => t.id === currentTier) ?? null;
   return (
     <main style={{ minHeight: '100vh', background: TEC_COLORS.bg, color: '#e7e7ea', padding: '32px 22px', fontFamily: 'system-ui, sans-serif' }}>
       <div style={{ maxWidth: 900, margin: '0 auto' }}>
@@ -40,9 +58,9 @@ export default function VipHome() {
         {/* Tiers */}
         <h2 style={{ color: TEC_COLORS.gold, fontSize: 16, marginTop: 28, marginBottom: 12 }}>Membership tiers</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 14 }}>
-          {TIERS.map((t) => {
+          {tiers.map((t) => {
             const sm = SOURCE_META[t.source];
-            const isCurrent = t.id === CURRENT_TIER;
+            const isCurrent = t.id === currentTier;
             return (
               <Link key={t.id} href={`/tier/${t.id}`} style={{ textDecoration: 'none' }}>
                 <div style={{ padding: 16, background: TEC_COLORS.surface, borderRadius: 12, border: `1px solid ${isCurrent ? TEC_COLORS.gold + '66' : '#ffffff10'}`, height: '100%' }}>
