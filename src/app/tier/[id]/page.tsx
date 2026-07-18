@@ -2,15 +2,21 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { TEC_COLORS } from '@yasser172/tec-ui';
-import { TIERS, getTier, CONCIERGE, SOURCE_META } from '@/lib/vip/membership';
+import { TIERS, CONCIERGE, SOURCE_META } from '@/lib/vip/membership';
+import { resolveTier } from '@/lib/vip/server';
 
+// Pre-render the curated sample tiers; allow live-only catalog tiers to render on
+// demand (the VIP read-surface is the catalog of record — C-128).
 export function generateStaticParams() {
   return TIERS.map((t) => ({ id: t.id }));
 }
+export const dynamicParams = true;
 
 export default async function TierDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const t = getTier(id);
+  // Resolve from the live VIP catalog; fall back to the curated sample so the page
+  // never 500s. A live catalog that omits the id is authoritative → notFound().
+  const { tier: t } = await resolveTier(id);
   if (!t) notFound();
 
   const sm = SOURCE_META[t.source];
