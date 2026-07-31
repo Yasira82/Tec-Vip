@@ -7,8 +7,10 @@ import { resolveMembership } from '@/lib/vip/server';
 // actual value (P5). VIP owns no economic capability, cannot grant Elite recognition
 // or modify Legend. Identity is derived from the `tec_user` session cookie
 // server-side — NEVER a query param or body (P6). The owner is passed to the backend
-// (the VIP read-surface); on no session / unreachable backend, the curated sample is
-// served so the page is never blank. Concierge is a VIP-owned static config.
+// (the VIP read-surface). The tier ladder is VIP's definitional catalog (shown
+// always); membership (currentTier) is the user's OWN data → null with no session /
+// unreachable backend, never a fabricated "STANDARD" (C-135 §4). Concierge is a
+// VIP-owned static config.
 function ownerFromSession(req: NextRequest): string | null {
   try {
     const raw = req.cookies.get('tec_user')?.value ?? '';

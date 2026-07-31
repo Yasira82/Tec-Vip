@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import '@/styles/tec-design-tokens.css';
+import { RefCapture } from '@/components/referral/RefCapture';
+import { RefApply } from '@/components/referral/RefApply';
 
 export const metadata: Metadata = {
   title:       'TEC VIP — Premium Experience Runtime',
@@ -58,7 +60,11 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <RefCapture />
+        <RefApply />
+        {children}
+      </body>
     </html>
   );
 }

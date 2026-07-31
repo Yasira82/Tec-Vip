@@ -23,7 +23,12 @@ domain / slug / legal + a themed home (**tiers** STANDARD→PARTNER · cross-app
 **benefits** each naming its owning app · **concierge**) + a `/tier/[id]` detail
 page + **VIP Standard** subscription (the Pi Portal "Process a Transaction" gate).
 > **V1 already exists** as **Hub PRO/ENTERPRISE** — this app is the read-only
-surface over it. A dedicated `vip-service` is V2. Not yet deployed.
+surface over it. A dedicated `vip-service` is V2.
+
+> **Status (2026-07): Deployed (Mainnet) · Pi App ID registered · env set · VIP Standard
+> payment live.** Now at the Monetization stage. Growth: **referral loop wired** — global
+> `?ref=` capture + apply (RefCapture/RefApply in `layout.tsx`) + an **Invite & earn** card
+> on `/app` over the shared platform proxy `/api/referral` → commerce-service (C-133).
 
 ---
 
@@ -33,7 +38,7 @@ surface over it. A dedicated `vip-service` is V2. Not yet deployed.
 |-------|-------|
 | **App** | TEC VIP |
 | **Domain** | `https://vip.tecosystem.app` |
-| **Pi App ID** | ⏳ TBD — register at Pi Developer Portal · then Vercel `NEXT_PUBLIC_PI_APP_ID` |
+| **Pi App ID** | ✅ Registered (Mainnet) · Vercel `NEXT_PUBLIC_PI_APP_ID` |
 | **APP_SOURCE slug** | `vip` (payment-service resolves `PI_API_KEY_VIP`) |
 | **PI_SANDBOX** | `false` (Mainnet) |
 

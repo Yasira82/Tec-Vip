@@ -6,14 +6,16 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { TEC_COLORS } from '@yasser172/tec-ui';
-import { TIERS, CONCIERGE, CURRENT_TIER, SOURCE_META, type Tier, type VipTier } from '@/lib/vip/membership';
+import { TIERS, CONCIERGE, SOURCE_META, type Tier, type VipTier } from '@/lib/vip/membership';
 import VipPro from './components/VipPro';
+import { InviteCard } from '@/components/referral/InviteCard';
 
 export default function VipHome() {
-  // The caller's OWN membership + tier catalog — fetched from the BFF (identity from
-  // the session cookie, P6), falling back to the curated sample so it's never blank.
+  // The tier ladder is VIP's own definitional catalog (shown always). Membership is
+  // the caller's OWN data (C-135 §4): currentTier stays null until the live BFF
+  // returns it — never a fabricated "STANDARD" for a signed-out visitor.
   const [tiers, setTiers] = useState<Tier[]>(TIERS);
-  const [currentTier, setCurrentTier] = useState<VipTier>(CURRENT_TIER);
+  const [currentTier, setCurrentTier] = useState<VipTier | null>(null);
   useEffect(() => {
     let alive = true;
     fetch('/api/bff/vip/membership', { cache: 'no-store' })
@@ -21,9 +23,9 @@ export default function VipHome() {
       .then((d) => {
         if (!alive || !d) return;
         if (Array.isArray(d.tiers)) setTiers(d.tiers);
-        if (d.currentTier) setCurrentTier(d.currentTier);
+        if (d.source === 'live' && d.currentTier) setCurrentTier(d.currentTier);
       })
-      .catch(() => { /* keep the sample */ });
+      .catch(() => { /* keep the definitional catalog; membership stays unknown */ });
     return () => { alive = false; };
   }, []);
 
@@ -88,12 +90,15 @@ export default function VipHome() {
           <strong>Eligibility, not authority (C-128 · P5).</strong> VIP owns no economic capability — it
           adds an experience layer on top of the owning apps. A benefit is an <em>eligibility</em>; the owning
           app (Commerce fees · Zone SLAs · FundX windows) + System define + enforce the value. VIP Elite
-          requires an Elite recognition; VIP can never grant Elite or modify Legend. Read-only sample.
+          requires an Elite recognition; VIP can never grant Elite or modify Legend.
         </p>
 
         {/* VIP Standard subscription */}
         <h2 style={{ color: TEC_COLORS.gold, fontSize: 16, marginTop: 32, marginBottom: 12 }}>Subscribe</h2>
         <VipPro />
+
+        {/* Invite & earn — the referral growth loop (C-133), platform-owned */}
+        <InviteCard />
       </div>
     </main>
   );

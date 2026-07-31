@@ -32,14 +32,16 @@ export function tierFromBackend(t: Record<string, unknown>): Tier {
 }
 
 export interface ResolvedMembership {
-  currentTier: VipTier;
+  currentTier: VipTier | null;   // the caller's OWN membership — null unless live
   tiers:       Tier[];
-  source:      'live' | 'sample';
+  source:      'live' | 'catalog';
 }
 
-// The caller's OWN membership (current tier) + the tier catalog — live backend
-// first, curated sample as fallback. `owner` is derived from the session by the BFF
-// (never a client param, P6); when absent or unknown, the sample is served.
+// The tier CATALOG (definitional — VIP owns the tier ladder, like Nexus templates /
+// FundX charters) + the caller's OWN current tier. Real data end-to-end (C-135 §4):
+// the tier ladder is legitimate product content, but membership is the user's own
+// data — with no session / an unreachable backend, currentTier is null (never a
+// fabricated "STANDARD"). `owner` is derived from the session by the BFF (P6).
 export async function resolveMembership(owner: string | null): Promise<ResolvedMembership> {
   if (GW && owner) {
     try {
@@ -54,15 +56,16 @@ export async function resolveMembership(owner: string | null): Promise<ResolvedM
           return { currentTier, tiers: rows.map((t) => tierFromBackend(t as Record<string, unknown>)), source: 'live' };
         }
       }
-    } catch { /* fall through to the curated sample */ }
+    } catch { /* fall through to the definitional catalog (membership unknown) */ }
   }
-  return { currentTier: 'STANDARD', tiers: TIERS, source: 'sample' };
+  return { currentTier: null, tiers: TIERS, source: 'catalog' };
 }
 
-export interface ResolvedTier { tier: Tier | null; source: 'live' | 'sample'; }
+export interface ResolvedTier { tier: Tier | null; source: 'live' | 'catalog'; }
 
-// One tier by id — live catalog first, sample fallback. A live catalog that omits
-// the id is authoritative (tier: null, source: 'live').
+// One tier by id from the definitional catalog — live backend first, local catalog
+// otherwise (tier definitions are VIP's own product content, not user data). A live
+// catalog that omits the id is authoritative (tier: null, source: 'live').
 export async function resolveTier(id: string): Promise<ResolvedTier> {
   if (GW) {
     try {
@@ -75,7 +78,7 @@ export async function resolveTier(id: string): Promise<ResolvedTier> {
           return { tier: found ?? null, source: 'live' };
         }
       }
-    } catch { /* fall through to the curated sample */ }
+    } catch { /* fall through to the definitional catalog */ }
   }
-  return { tier: getTier(id), source: 'sample' };
+  return { tier: getTier(id), source: 'catalog' };
 }
