@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { TEC_COLORS } from '@yasser172/tec-ui';
 import { TIERS, CONCIERGE, SOURCE_META, type Tier, type VipTier } from '@/lib/vip/membership';
 import VipPro from './components/VipPro';
+import { InviteCard } from '@/components/referral/InviteCard';
 
 export default function VipHome() {
   // The tier ladder is VIP's own definitional catalog (shown always). Membership is
@@ -95,6 +96,9 @@ export default function VipHome() {
         {/* VIP Standard subscription */}
         <h2 style={{ color: TEC_COLORS.gold, fontSize: 16, marginTop: 32, marginBottom: 12 }}>Subscribe</h2>
         <VipPro />
+
+        {/* Invite & earn — the referral growth loop (C-133), platform-owned */}
+        <InviteCard />
       </div>
     </main>
   );
