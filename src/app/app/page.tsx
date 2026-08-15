@@ -87,7 +87,7 @@ export default function VipHome() {
         <div style={{ padding: 16, background: TEC_COLORS.surface, borderRadius: 12, fontSize: 13, opacity: 0.85 }}>{CONCIERGE.summary}</div>
 
         <p style={{ opacity: 0.55, fontSize: 12, marginTop: 20, lineHeight: 1.6, borderLeft: `2px solid ${TEC_COLORS.gold}55`, paddingLeft: 12 }}>
-          <strong>Eligibility, not authority (C-128 · P5).</strong> VIP owns no economic capability — it
+          <strong>Eligibility, not authority.</strong> VIP owns no economic capability — it
           adds an experience layer on top of the owning apps. A benefit is an <em>eligibility</em>; the owning
           app (Commerce fees · Zone SLAs · FundX windows) + System define + enforce the value. VIP Elite
           requires an Elite recognition; VIP can never grant Elite or modify Legend.

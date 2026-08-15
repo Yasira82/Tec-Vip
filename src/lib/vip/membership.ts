@@ -52,7 +52,7 @@ export const TIERS: Tier[] = [
     label: 'VIP Elite',
     price: 30,
     source: 'ELITE_EARNED',
-    requires: 'Elite recognition (C-127) — earned, not bought',
+    requires: 'Elite recognition — earned, not bought',
     summary: 'All Standard + exclusive access, unlocked by an Elite recognition.',
     benefits: [
       { app: 'Connection', label: 'Exclusive events + VIP lounge' },

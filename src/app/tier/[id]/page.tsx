@@ -47,9 +47,9 @@ export default async function TierDetail({ params }: { params: Promise<{ id: str
         </div>
 
         <p style={{ marginTop: 20, fontSize: 12, opacity: 0.55, lineHeight: 1.6, borderLeft: `2px solid ${TEC_COLORS.gold}55`, paddingLeft: 12 }}>
-          These are <strong>eligibility shapes</strong>, not VIP-set policy (C-128 · P5). The owning app +
-          System define + enforce the actual value. {t.source === 'ELITE_EARNED'
-            ? 'This tier is unlocked by an Elite recognition (C-127) — earned, never bought.'
+          These are <strong>eligibility shapes</strong>, not VIP-set policy. The owning app +
+          System define + enforce the actual value. {t.source === 'ELITE_EARNED'?
+            'This tier is unlocked by an Elite recognition — earned, never bought.'
             : t.source === 'VERIFIED_ROLE'
             ? 'This tier requires a verified role checked live at delivery.'
             : 'This tier is subscription-based (any pioneer).'}
