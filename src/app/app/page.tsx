@@ -37,7 +37,7 @@ export default function VipHome() {
           <div style={{ fontSize: 34 }}>👑</div>
           <h1 style={{ color: TEC_COLORS.gold, margin: '4px 0 2px', fontSize: 26 }}>TEC VIP</h1>
           <p style={{ opacity: 0.7, margin: 0, fontSize: 14 }}>
-            Premium Experience Runtime — excellence deserves exceptional experience.
+            Premium experiences — because excellence deserves an exceptional experience.
           </p>
         </header>
 
@@ -87,10 +87,10 @@ export default function VipHome() {
         <div style={{ padding: 16, background: TEC_COLORS.surface, borderRadius: 12, fontSize: 13, opacity: 0.85 }}>{CONCIERGE.summary}</div>
 
         <p style={{ opacity: 0.55, fontSize: 12, marginTop: 20, lineHeight: 1.6, borderLeft: `2px solid ${TEC_COLORS.gold}55`, paddingLeft: 12 }}>
-          <strong>Eligibility, not authority.</strong> VIP owns no economic capability — it
-          adds an experience layer on top of the owning apps. A benefit is an <em>eligibility</em>; the owning
-          app (Commerce fees · Zone SLAs · FundX windows) + System define + enforce the value. VIP Elite
-          requires an Elite recognition; VIP can never grant Elite or modify Legend.
+          <strong>Benefits, not shortcuts.</strong> VIP unlocks premium experiences across
+          TEC — like reduced fees, priority access, and exclusive perks. Each perk is
+          honored by the app that provides it. Earned tiers (like VIP Elite) come from
+          real recognition — they can never be bought.
         </p>
 
         {/* VIP Standard subscription */}

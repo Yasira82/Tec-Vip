@@ -4,7 +4,7 @@ import { RefCapture } from '@/components/referral/RefCapture';
 import { RefApply } from '@/components/referral/RefApply';
 
 export const metadata: Metadata = {
-  title:       'TEC VIP — Premium Experience Runtime',
+  title:       'TEC VIP — Premium Experiences',
   description: 'TEC VIP — premium experience across the TEC ecosystem: tiers, benefits, concierge (read-only).',
 };
 
