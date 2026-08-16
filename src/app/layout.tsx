@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 import '@/styles/tec-design-tokens.css';
 import { RefCapture } from '@/components/referral/RefCapture';
 import { RefApply } from '@/components/referral/RefApply';
+import { LocaleProvider } from '@/lib/i18n';
 
 export const metadata: Metadata = {
-  title:       'TEC VIP — Premium Experience Runtime',
+  title:       'TEC VIP — Premium Experiences',
   description: 'TEC VIP — premium experience across the TEC ecosystem: tiers, benefits, concierge (read-only).',
 };
 
@@ -61,9 +62,11 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <RefCapture />
-        <RefApply />
-        {children}
+        <LocaleProvider>
+          <RefCapture />
+          <RefApply />
+          {children}
+        </LocaleProvider>
       </body>
     </html>
   );

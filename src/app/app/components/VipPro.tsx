@@ -106,7 +106,7 @@ export default function VipPro() {
       </p>
       <p style={{ opacity: 0.55, fontSize: 11.5, margin: '0 0 14px' }}>
         Earned tiers (VIP Elite / Merchant / Founder) are unlocked by recognition or
-        verification elsewhere — not sold here (C-128 · P5).
+        verification elsewhere — not sold here.
       </p>
       <button
         onClick={handleSubscribe}
