@@ -119,7 +119,7 @@ export const CONCIERGE = {
 
 export const SOURCE_META: Record<TierSource, { label: string; tone: string }> = {
   SUBSCRIPTION:  { label: 'Subscription',    tone: '#3B82F6' },
-  ELITE_EARNED:  { label: 'Elite-earned',    tone: '#FBBF24' },
+  ELITE_EARNED:  { label: 'Elite-earned',    tone: '#FBB44A' },
   VERIFIED_ROLE: { label: 'Verified role',   tone: '#22C55E' },
 };
 
