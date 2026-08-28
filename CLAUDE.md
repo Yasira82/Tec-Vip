@@ -143,15 +143,15 @@ VIP V0/V1 — Premium Experience preview (customized from template):
   ✅ /app themed: tiers + cross-app benefits + concierge + VIP Standard (real Pi U2A)
   ✅ /tier/[id] detail (benefits per owning app + P5 note) + BFF /api/bff/vip/membership
 
-Next (before live):
-  □ Register Pi App ID (Pi Developer Portal) → Vercel NEXT_PUBLIC_PI_APP_ID +
+Live on Mainnet — all complete (SSoT: architecture/app-fleet.yaml):
+  ✅ Register Pi App ID (Pi Developer Portal) → Vercel NEXT_PUBLIC_PI_APP_ID +
     API_GATEWAY_URL · INTERNAL_SECRET · SSO_SECRET · PI_SANDBOX=false.
     (NEXT_PUBLIC_HUB_URL MUST be https://hub.tecosystem.app — the apex tecosystem.app
      is not the Hub → ERR_CONNECTION_CLOSED at login; redeploy after changing it.)
-  □ payment-service: set PI_API_KEY_VIP on Railway (approve→502 otherwise, C-12 §11).
-  □ Hub SSO: add vip.tecosystem.app + tec-vip.vercel.app to Hub /api/auth/sso
+  ✅ payment-service: set PI_API_KEY_VIP on Railway (approve→502 otherwise, C-12 §11).
+  ✅ Hub SSO: add vip.tecosystem.app + tec-vip.vercel.app to Hub /api/auth/sso
     ALLOWED_TARGETS + Hub domain registry.
-  □ Deploy (Vercel) + runtime-verify login (C-123) + a real VIP Standard payment
+  ✅ Deploy (Vercel) + runtime-verify login (C-123) + a real VIP Standard payment
     Mode 1 (Hub) AND Mode 2 (standalone).
 
 VIP V2+ (post-Portal — C-128): dedicated vip-service (status/benefits/events/
