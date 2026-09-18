@@ -38,7 +38,10 @@ export const TIERS: Tier[] = [
   {
     id: 'STANDARD',
     label: 'VIP Standard',
-    price: 50,
+    // Matches what VipPro actually charges (5π, the fleet's PRO entry price).
+    // This catalog feeds the tier list on /app, so a stale number here shows a
+    // different price on the page the buyer reads BEFORE the buy card.
+    price: 5,
     source: 'SUBSCRIPTION',
     summary: 'Priority in every queue + advanced analytics for any pioneer.',
     benefits: [
