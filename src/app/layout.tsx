@@ -6,6 +6,7 @@ import { RefCapture } from '@/components/referral/RefCapture';
 import { RefApply } from '@/components/referral/RefApply';
 import { LocaleProvider } from '@/lib/i18n';
 import { ArrivalReport } from '@/components/pioneer/ArrivalReport';
+import { QuestReturn } from '@/components/pioneer/QuestReturn';
 
 export const metadata: Metadata = {
   title:       'TEC VIP — Premium Experiences',
@@ -117,6 +118,7 @@ export default function RootLayout({
       <body>
         <PiWarmup />
         <ArrivalReport />
+        <QuestReturn />
         <LocaleProvider>
           <RefCapture />
           <RefApply />
