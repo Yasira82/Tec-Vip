@@ -13,6 +13,7 @@ import {
   createPaymentRecord,
   createU2APayment,
 } from '@/lib/pi-payment';
+import { VIP_STANDARD_PRICE_PI } from '@/lib/vip/membership';
 
 /**
  * VIP STANDARD — the entry tier, and the only thing VIP sells (C-128).
@@ -44,7 +45,7 @@ import {
  * Both halves are needed: the id alone at 50π would have cleared the PRO floor and
  * charged tenfold; the price alone would still have activated nothing.
  */
-const VIP_STANDARD = { id: 'vip_pro_monthly', name: 'VIP Standard (monthly)', price: 5 };
+const VIP_STANDARD = { id: 'vip_pro_monthly', name: 'VIP Standard (monthly)', price: VIP_STANDARD_PRICE_PI };
 
 export default function VipPro() {
   const [piReady, setPiReady] = useState(false);

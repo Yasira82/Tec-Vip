@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { TEC_COLORS } from '@yasser172/tec-ui';
-import { CONCIERGE, SOURCE_META } from '@/lib/vip/membership';
+import { CONCIERGE, SOURCE_META, NOT_FOR_SALE } from '@/lib/vip/membership';
 import { resolveTier } from '@/lib/vip/server';
 
 export const dynamic = 'force-dynamic';
@@ -25,7 +25,9 @@ export default async function TierDetail({ params }: { params: Promise<{ id: str
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginTop: 16, gap: 12, flexWrap: 'wrap' }}>
           <h1 style={{ color: TEC_COLORS.gold, margin: 0, fontSize: 24 }}>{t.label}</h1>
-          <span style={{ color: TEC_COLORS.gold, fontWeight: 800, fontSize: 18 }}>π {t.price}<span style={{ opacity: 0.6, fontSize: 12, fontWeight: 500 }}>/mo</span></span>
+          {t.price != null
+            ? <span style={{ color: TEC_COLORS.gold, fontWeight: 800, fontSize: 18 }}>π {t.price}<span style={{ opacity: 0.6, fontSize: 12, fontWeight: 500 }}>/mo</span></span>
+            : <span style={{ color: sm.tone, fontWeight: 700, fontSize: 14 }}>{NOT_FOR_SALE[t.source]}</span>}
         </div>
         <div style={{ display: 'flex', gap: 10, marginTop: 10, flexWrap: 'wrap' }}>
           <span style={{ fontSize: 12, color: sm.tone, border: `1px solid ${sm.tone}55`, borderRadius: 20, padding: '3px 10px' }}>{sm.label}</span>

@@ -23,7 +23,9 @@ export function tierFromBackend(t: Record<string, unknown>): Tier {
   return {
     id:       String(t.tier ?? '') as VipTier,
     label:    String(t.label ?? ''),
-    price:    Number(t.price ?? 0),
+    // Only a SUBSCRIPTION tier has a price (C13). Guarded here too, so an older backend
+    // that still stores 30/100/… for earned tiers cannot put a π/month on the page.
+    price:    String(t.source ?? '') === 'SUBSCRIPTION' && Number(t.price) > 0 ? Number(t.price) : null,
     source:   String(t.source ?? 'SUBSCRIPTION') as TierSource,
     requires: t.requires ? String(t.requires) : undefined,
     summary:  String(t.summary ?? ''),

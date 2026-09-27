@@ -7,7 +7,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { TEC_COLORS } from '@yasser172/tec-ui';
-import { TIERS, CONCIERGE, SOURCE_META, type Tier, type VipTier } from '@/lib/vip/membership';
+import { TIERS, CONCIERGE, SOURCE_META, NOT_FOR_SALE, type Tier, type VipTier } from '@/lib/vip/membership';
 import { useTranslation } from '@/lib/i18n';
 import VipPro from './components/VipPro';
 import { InviteCard } from '@/components/referral/InviteCard';
@@ -96,7 +96,11 @@ export default function VipHome() {
                     <div style={{ padding: 16, background: TEC_COLORS.surface, borderRadius: 12, border: `1px solid ${isCurrent ? TEC_COLORS.gold + '66' : '#ffffff10'}`, height: '100%' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <span style={{ color: '#e7e7ea', fontWeight: 700 }}>{tr.label}</span>
-                        <span style={{ color: TEC_COLORS.gold, fontWeight: 800, fontSize: 14 }}>π {tr.price}<span style={{ opacity: 0.6, fontSize: 11, fontWeight: 500 }}>/mo</span></span>
+                        {/* Only the SUBSCRIPTION tier is sold — earned/verified tiers say how they are
+                            unlocked instead of showing a price nobody can pay (C13, C-128). */}
+                        {tr.price != null
+                          ? <span style={{ color: TEC_COLORS.gold, fontWeight: 800, fontSize: 14 }}>π {tr.price}<span style={{ opacity: 0.6, fontSize: 11, fontWeight: 500 }}>/mo</span></span>
+                          : <span style={{ color: sm.tone, fontWeight: 700, fontSize: 12 }}>{NOT_FOR_SALE[tr.source]}</span>}
                       </div>
                       <div style={{ marginTop: 8 }}>
                         <span style={{ fontSize: 11, color: sm.tone, border: `1px solid ${sm.tone}55`, borderRadius: 20, padding: '2px 8px' }}>{sm.label}</span>
