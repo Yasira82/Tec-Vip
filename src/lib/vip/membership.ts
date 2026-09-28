@@ -27,21 +27,34 @@ export interface Benefit {
 export interface Tier {
   id:          VipTier;
   label:       string;
-  price:       number;          // π/month — the subscription surface only
+  price:       number | null;   // π/month — ONLY a SUBSCRIPTION tier is sold; null = not for sale (C-128)
   source:      TierSource;
   requires?:   string;          // what unlocks it (e.g. "Elite recognition")
   summary:     string;
   benefits:    Benefit[];
 }
 
+/**
+ * What VIP Standard costs — the only tier VIP sells. VipPro charges exactly this and
+ * the backend catalog serves the same number (identity-service VIP_STANDARD_PRICE_PI).
+ * The Tiers tab once said 50π while the buy card charged 5π (C13).
+ */
+export const VIP_STANDARD_PRICE_PI = 5;
+
+/** What a tier that is NOT sold shows where a price would be (C-128: earned, never bought). */
+export const NOT_FOR_SALE: Record<TierSource, string> = {
+  SUBSCRIPTION:  'Not available',
+  ELITE_EARNED:  'Earned via Elite',
+  VERIFIED_ROLE: 'By verification',
+};
+
 export const TIERS: Tier[] = [
   {
     id: 'STANDARD',
     label: 'VIP Standard',
-    // Matches what VipPro actually charges (5π, the fleet's PRO entry price).
-    // This catalog feeds the tier list on /app, so a stale number here shows a
-    // different price on the page the buyer reads BEFORE the buy card.
-    price: 5,
+    // The one number VipPro charges — this catalog feeds the tier list on /app, so a
+    // stale number here shows a different price on the page read BEFORE the buy card.
+    price: VIP_STANDARD_PRICE_PI,
     source: 'SUBSCRIPTION',
     summary: 'Priority in every queue + advanced analytics for any pioneer.',
     benefits: [
@@ -53,7 +66,7 @@ export const TIERS: Tier[] = [
   {
     id: 'ELITE',
     label: 'VIP Elite',
-    price: 30,
+    price: null,   // earned / verified — never sold (C-128)
     source: 'ELITE_EARNED',
     requires: 'Elite recognition — earned, not bought',
     summary: 'All Standard + exclusive access, unlocked by an Elite recognition.',
@@ -66,7 +79,7 @@ export const TIERS: Tier[] = [
   {
     id: 'MERCHANT',
     label: 'VIP Merchant',
-    price: 100,
+    price: null,   // earned / verified — never sold (C-128)
     source: 'VERIFIED_ROLE',
     requires: 'Zone-verified merchant',
     summary: 'For verified Commerce merchants — featured placement + priority.',
@@ -78,7 +91,7 @@ export const TIERS: Tier[] = [
   {
     id: 'INVESTOR',
     label: 'VIP Investor',
-    price: 200,
+    price: null,   // earned / verified — never sold (C-128)
     source: 'VERIFIED_ROLE',
     requires: 'Verified FundX investor',
     summary: 'For verified FundX investors — early + exclusive access.',
@@ -90,7 +103,7 @@ export const TIERS: Tier[] = [
   {
     id: 'FOUNDER',
     label: 'VIP Founder',
-    price: 500,
+    price: null,   // earned / verified — never sold (C-128)
     source: 'VERIFIED_ROLE',
     requires: 'Verified NBF / Epic project founder',
     summary: 'For verified founders — incubator, dedicated manager, priority verification.',
@@ -102,7 +115,7 @@ export const TIERS: Tier[] = [
   {
     id: 'PARTNER',
     label: 'VIP Partner',
-    price: 1000,
+    price: null,   // earned / verified — never sold (C-128)
     source: 'VERIFIED_ROLE',
     requires: 'Institutional Pi partner',
     summary: 'Institutional partnership — full concierge + custom integration.',
