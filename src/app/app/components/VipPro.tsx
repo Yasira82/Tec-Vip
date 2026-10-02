@@ -14,6 +14,7 @@ import {
   createU2APayment,
 } from '@/lib/pi-payment';
 import { VIP_STANDARD_PRICE_PI } from '@/lib/vip/membership';
+import { CancelProButton } from '@/components/pro/CancelProButton';
 
 /**
  * VIP STANDARD — the entry tier, and the only thing VIP sells (C-128).
@@ -119,6 +120,7 @@ export default function VipPro() {
             {daysRemaining <= 7 ? '⏳ ' : ''}Expires in {daysRemaining} day{daysRemaining === 1 ? '' : 's'}{daysRemaining <= 7 ? ' — re-subscribe to keep Pro (one-time monthly, no auto-renewal).' : '.'}
           </div>
         )}
+        <CancelProButton />
       </div>
     );
   }
