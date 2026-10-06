@@ -1,5 +1,7 @@
 'use client';
 
+import { SignInGate } from '@/components/pi/SignInGate';
+
 // TEC VIP — Premium Experience home (C-128), read-only V1.
 // The reward layer of Legend (evidence) → Elite (recognition) → VIP (experience).
 // Cross-cutting: VIP grants ELIGIBILITY; the owning apps enforce the value (P5).
@@ -14,7 +16,7 @@ import { InviteCard } from '@/components/referral/InviteCard';
 import { BottomNav, type VipTab } from './components/BottomNav';
 import { SettingsView } from './components/SettingsView';
 
-export default function VipHome() {
+function VipHome() {
   const { t } = useTranslation();
   const [tab, setTab] = useState<VipTab>('home');
 
@@ -132,4 +134,11 @@ export default function VipHome() {
       <BottomNav active={tab} onSelect={setTab} />
     </main>
   );
+}
+
+// The door: a sign-in button before any screen when there is no session
+// (SignInGate — C-123 §10; owner, 2026-10-06). A visit from the Hub arrives
+// signed in (§12) and goes straight through.
+export default function VipHomeGated() {
+  return <SignInGate><VipHome /></SignInGate>;
 }
