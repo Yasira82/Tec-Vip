@@ -2,6 +2,7 @@ import {
   TIERS, getTier,
   type Tier, type VipTier, type TierSource, type Benefit,
 } from './membership';
+import { gatewayFetch } from '@/lib/gateway-fetch';
 
 // Server-only VIP backend access (C-128). Calls the real VIP read-surface
 // (identity-service) via the gateway with the inter-service key, and maps the
@@ -47,7 +48,7 @@ export interface ResolvedMembership {
 export async function resolveMembership(owner: string | null): Promise<ResolvedMembership> {
   if (GW && owner) {
     try {
-      const res = await fetch(`${GW}/api/identity/vip/membership/${encodeURIComponent(owner)}`, {
+      const res = await gatewayFetch(`${GW}/api/identity/vip/membership/${encodeURIComponent(owner)}`, {
         headers: gwHeaders(), cache: 'no-store',
       });
       if (res.ok) {
@@ -71,7 +72,7 @@ export interface ResolvedTier { tier: Tier | null; source: 'live' | 'catalog'; }
 export async function resolveTier(id: string): Promise<ResolvedTier> {
   if (GW) {
     try {
-      const res = await fetch(`${GW}/api/identity/vip/tiers`, { headers: gwHeaders(), cache: 'no-store' });
+      const res = await gatewayFetch(`${GW}/api/identity/vip/tiers`, { headers: gwHeaders(), cache: 'no-store' });
       if (res.ok) {
         const data = await res.json().catch(() => ({}));
         const rows = data?.data?.tiers;
