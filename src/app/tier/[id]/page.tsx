@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { TEC_COLORS } from '@yasser172/tec-ui';
-import { CONCIERGE, SOURCE_META, NOT_FOR_SALE } from '@/lib/vip/membership';
+import { CONCIERGE, SOURCE_META, NOT_FOR_SALE, onSale } from '@/lib/vip/membership';
 import { resolveTier } from '@/lib/vip/server';
 
 export const dynamic = 'force-dynamic';
@@ -25,14 +25,14 @@ export default async function TierDetail({ params }: { params: Promise<{ id: str
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginTop: 16, gap: 12, flexWrap: 'wrap' }}>
           <h1 style={{ color: TEC_COLORS.gold, margin: 0, fontSize: 24 }}>{t.label}</h1>
-          {t.price != null
+          {onSale(t)
             ? <span style={{ color: TEC_COLORS.gold, fontWeight: 800, fontSize: 18 }}>π {t.price}<span style={{ opacity: 0.6, fontSize: 12, fontWeight: 500 }}>/mo</span></span>
-            : <span style={{ color: sm.tone, fontWeight: 700, fontSize: 14 }}>{NOT_FOR_SALE[t.source]}</span>}
+            : <span style={{ color: sm.tone, fontWeight: 700, fontSize: 14 }}>{t.price != null ? 'Not on sale yet' : NOT_FOR_SALE[t.source]}</span>}
         </div>
         <div style={{ display: 'flex', gap: 10, marginTop: 10, flexWrap: 'wrap' }}>
           <span style={{ fontSize: 12, color: sm.tone, border: `1px solid ${sm.tone}55`, borderRadius: 20, padding: '3px 10px' }}>{sm.label}</span>
           {t.requires && <span style={{ fontSize: 12, opacity: 0.7, border: '1px solid #ffffff22', borderRadius: 20, padding: '3px 10px' }}>Requires: {t.requires}</span>}
-          <span style={{ fontSize: 12, opacity: 0.7, border: '1px solid #ffffff22', borderRadius: 20, padding: '3px 10px' }}>Concierge SLA {CONCIERGE.slaByTier[t.id]}</span>
+          {CONCIERGE.live && <span style={{ fontSize: 12, opacity: 0.7, border: '1px solid #ffffff22', borderRadius: 20, padding: '3px 10px' }}>Concierge SLA {CONCIERGE.slaByTier[t.id]}</span>}
         </div>
 
         <p style={{ marginTop: 16, lineHeight: 1.6, opacity: 0.9 }}>{t.summary}</p>
@@ -43,13 +43,15 @@ export default async function TierDetail({ params }: { params: Promise<{ id: str
           {t.benefits.map((b, i) => (
             <div key={i} style={{ display: 'flex', gap: 12, padding: '9px 0', borderBottom: '1px solid #ffffff10', fontSize: 13.5 }}>
               <span style={{ minWidth: 92, color: TEC_COLORS.gold, opacity: 0.9 }}>{b.app}</span>
-              <span style={{ opacity: 0.85 }}>{b.label}</span>
+              <span style={{ opacity: b.live ? 0.85 : 0.6, flex: 1 }}>{b.label}</span>
+              {!b.live && <span style={{ fontSize: 10.5, color: '#9ca3af', border: '1px solid #ffffff22', borderRadius: 20, padding: '1px 8px', whiteSpace: 'nowrap' }}>Coming soon</span>}
             </div>
           ))}
         </div>
 
         <p style={{ marginTop: 20, fontSize: 12, opacity: 0.55, lineHeight: 1.6, borderLeft: `2px solid ${TEC_COLORS.gold}55`, paddingLeft: 12 }}>
-          Each perk is honored by the app that provides it. {t.source === 'ELITE_EARNED'?
+          Each perk is given by the app named next to it. A perk marked “Coming soon” is not
+          active yet — that app does not give it today. {t.source === 'ELITE_EARNED'?
             'This tier is unlocked by an Elite recognition — earned, never bought.'
             : t.source === 'VERIFIED_ROLE'
             ? 'This tier requires a verified role checked live at delivery.'

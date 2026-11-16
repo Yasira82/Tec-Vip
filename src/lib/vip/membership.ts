@@ -22,6 +22,12 @@ export type TierSource = 'SUBSCRIPTION' | 'ELITE_EARNED' | 'VERIFIED_ROLE';
 export interface Benefit {
   app:   string;          // the OWNING app that enforces the benefit
   label: string;          // an eligibility shape — NOT a VIP-set policy
+  /**
+   * True only once the OWNING app actually gives it. Until then the page says
+   * "Coming soon" — a perk listed as a plain fact that nothing delivers is a promise
+   * the platform is breaking (16 Nov 2026: no owning app honoured any VIP benefit).
+   */
+  live?: boolean;
 }
 
 export interface Tier {
@@ -47,6 +53,14 @@ export const NOT_FOR_SALE: Record<TierSource, string> = {
   ELITE_EARNED:  'Earned via Elite',
   VERIFIED_ROLE: 'By verification',
 };
+
+/**
+ * A tier is on sale only when it has a price AND at least one benefit some app really
+ * gives. VIP Standard was sold at 5π while none did; marking the first benefit live is
+ * what puts it back on sale — nothing else needs to change.
+ */
+export const onSale = (t: Tier): boolean =>
+  t.source === 'SUBSCRIPTION' && t.price != null && t.benefits.some((b) => b.live === true);
 
 export const TIERS: Tier[] = [
   {
@@ -129,6 +143,8 @@ export const TIERS: Tier[] = [
 // Concierge is a VIP-owned service (async assistant / priority support).
 export const CONCIERGE = {
   label: 'Concierge',
+  /** No concierge service exists yet — shown as "Coming soon", and its SLAs are not shown. */
+  live: false,
   summary: 'Personal async assistant, priority support, and service coordination — SLA scales with tier.',
   slaByTier: { STANDARD: '< 2hr', ELITE: '< 2hr', MERCHANT: '< 1hr', INVESTOR: '< 1hr', FOUNDER: '< 30m', PARTNER: '< 30m' } as Record<VipTier, string>,
 };

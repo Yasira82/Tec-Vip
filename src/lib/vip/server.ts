@@ -29,7 +29,7 @@ export function tierFromBackend(t: Record<string, unknown>): Tier {
     source:   String(t.source ?? 'SUBSCRIPTION') as TierSource,
     requires: t.requires ? String(t.requires) : undefined,
     summary:  String(t.summary ?? ''),
-    benefits: benefits.map((b): Benefit => ({ app: String(b.app ?? ''), label: String(b.label ?? '') })),
+    benefits: benefits.map((b): Benefit => ({ app: String(b.app ?? ''), label: String(b.label ?? ''), live: b.live === true })),
   };
 }
 
