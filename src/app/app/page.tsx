@@ -9,7 +9,7 @@ import { SignInGate } from '@/components/pi/SignInGate';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { TEC_COLORS } from '@yasser172/tec-ui';
-import { TIERS, CONCIERGE, SOURCE_META, NOT_FOR_SALE, type Tier, type VipTier } from '@/lib/vip/membership';
+import { TIERS, CONCIERGE, SOURCE_META, NOT_FOR_SALE, onSale, type Tier, type VipTier } from '@/lib/vip/membership';
 import { useTranslation } from '@/lib/i18n';
 import VipPro from './components/VipPro';
 import { InviteCard } from '@/components/referral/InviteCard';
@@ -74,14 +74,15 @@ function VipHome() {
             )}
 
             {/* Concierge */}
-            <h2 style={{ color: TEC_COLORS.gold, fontSize: 16, marginTop: 28, marginBottom: 8 }}>{CONCIERGE.label}</h2>
+            <h2 style={{ color: TEC_COLORS.gold, fontSize: 16, marginTop: 28, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>{CONCIERGE.label}{!CONCIERGE.live && <span style={{ fontSize: 10.5, color: '#9ca3af', border: '1px solid #ffffff22', borderRadius: 20, padding: '1px 8px', whiteSpace: 'nowrap' }}>Coming soon</span>}</h2>
             <div style={{ padding: 16, background: TEC_COLORS.surface, borderRadius: 12, fontSize: 13, opacity: 0.85 }}>{CONCIERGE.summary}</div>
 
             <p style={{ opacity: 0.55, fontSize: 12, marginTop: 20, lineHeight: 1.6, borderLeft: `2px solid ${TEC_COLORS.gold}55`, paddingLeft: 12 }}>
-              <strong>Benefits, not shortcuts.</strong> VIP unlocks premium experiences across
-              TEC — like reduced fees, priority access, and exclusive perks. Each perk is
-              honored by the app that provides it. Earned tiers (like VIP Elite) come from
-              real recognition — they can never be bought.
+              <strong>Where VIP is today.</strong> VIP is the reward layer of TEC: each perk is
+              given by the app that owns it — Commerce, Zone, FundX and the others. None of
+              those perks is active yet, so every one is marked “Coming soon” and nothing here
+              is on sale. Earned tiers (like VIP Elite) come from real recognition — they can
+              never be bought.
             </p>
           </>
         )}
@@ -100,9 +101,9 @@ function VipHome() {
                         <span style={{ color: '#e7e7ea', fontWeight: 700 }}>{tr.label}</span>
                         {/* Only the SUBSCRIPTION tier is sold — earned/verified tiers say how they are
                             unlocked instead of showing a price nobody can pay (C13, C-128). */}
-                        {tr.price != null
+                        {onSale(tr)
                           ? <span style={{ color: TEC_COLORS.gold, fontWeight: 800, fontSize: 14 }}>π {tr.price}<span style={{ opacity: 0.6, fontSize: 11, fontWeight: 500 }}>/mo</span></span>
-                          : <span style={{ color: sm.tone, fontWeight: 700, fontSize: 12 }}>{NOT_FOR_SALE[tr.source]}</span>}
+                          : <span style={{ color: sm.tone, fontWeight: 700, fontSize: 12 }}>{tr.price != null ? 'Not on sale yet' : NOT_FOR_SALE[tr.source]}</span>}
                       </div>
                       <div style={{ marginTop: 8 }}>
                         <span style={{ fontSize: 11, color: sm.tone, border: `1px solid ${sm.tone}55`, borderRadius: 20, padding: '2px 8px' }}>{sm.label}</span>

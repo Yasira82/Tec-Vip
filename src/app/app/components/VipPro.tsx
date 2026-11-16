@@ -13,7 +13,7 @@ import {
   createPaymentRecord,
   createU2APayment,
 } from '@/lib/pi-payment';
-import { VIP_STANDARD_PRICE_PI } from '@/lib/vip/membership';
+import { VIP_STANDARD_PRICE_PI, getTier, onSale } from '@/lib/vip/membership';
 import { CancelProButton } from '@/components/pro/CancelProButton';
 
 /**
@@ -121,6 +121,22 @@ export default function VipPro() {
           </div>
         )}
         <CancelProButton />
+      </div>
+    );
+  }
+
+  // Not sold while no app gives any of its benefits (onSale). A subscriber who already
+  // paid still sees their plan and the cancel button above.
+  const standard = getTier('STANDARD');
+  if (!standard || !onSale(standard)) {
+    return (
+      <div style={{ padding: 20, background: TEC_COLORS.surface, borderRadius: 14, border: '1px solid #ffffff14', maxWidth: 440 }}>
+        <h2 style={{ margin: 0, color: TEC_COLORS.gold, fontSize: 18 }}>VIP Standard — not on sale yet</h2>
+        <p style={{ opacity: 0.75, fontSize: 13, margin: '8px 0 0', lineHeight: 1.6 }}>
+          VIP benefits are given by the apps that own them, and none of them is active yet.
+          We will open VIP Standard when the first benefit is real — not before. Nothing
+          here can be bought today.
+        </p>
       </div>
     );
   }
