@@ -47,6 +47,10 @@ export default function HomePage() {
         <div style={{ fontSize: 13, color: TEC_COLORS.subtext, marginBottom: 32 }}>
           TEC ECOSYSTEM
         </div>
+        {/* What this app is, in the Hub registry's words (tec-app domains/_registry.ts valueProp). */}
+        <div style={{ fontSize: 13, color: TEC_COLORS.subtext, margin: '-20px auto 32px', maxWidth: 330, lineHeight: 1.5 }}>
+          See the membership tiers and which TEC app gives each benefit — benefits are coming soon.
+        </div>
         <button
           onClick={handleLogin}
           disabled={isLoading}
